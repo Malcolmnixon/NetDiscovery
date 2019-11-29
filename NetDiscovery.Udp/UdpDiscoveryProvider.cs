@@ -41,9 +41,14 @@ namespace NetDiscovery.Udp
         private readonly Dictionary<IPAddress, Socket> _sockets = new Dictionary<IPAddress, Socket>();
 
         /// <summary>
-        /// Broadcast end-point
+        /// IPv4 broadcast end-point
         /// </summary>
         private readonly IPEndPoint _broadcastEndPoint;
+
+        /// <summary>
+        /// IPv6 link-local end-point
+        /// </summary>
+        private readonly IPEndPoint _linkLocalEndPoint;
 
         /// <summary>
         /// Discovery cancellation token source
@@ -62,6 +67,7 @@ namespace NetDiscovery.Udp
         public UdpDiscoveryProvider(int port)
         {
             _broadcastEndPoint = new IPEndPoint(IPAddress.Broadcast, port);
+            _linkLocalEndPoint = new IPEndPoint(IPAddress.Parse("ff02::1"), port);
             Port = port;
         }
 
@@ -140,7 +146,10 @@ namespace NetDiscovery.Udp
             var messageBytes = Encoding.ASCII.GetBytes(message);
 
             foreach (var socket in _sockets.Values)
-                socket.SendTo(messageBytes, _broadcastEndPoint);
+                if (socket.AddressFamily == AddressFamily.InterNetwork)
+                    socket.SendTo(messageBytes, _broadcastEndPoint);
+                else if (socket.AddressFamily == AddressFamily.InterNetworkV6)
+                    socket.SendTo(messageBytes, _linkLocalEndPoint);
         }
 
 
@@ -176,10 +185,8 @@ namespace NetDiscovery.Udp
                         var addresses = NetworkInterface
                             .GetAllNetworkInterfaces()
                             .Where(i => i.OperationalStatus == OperationalStatus.Up)
-                            .Where(i => i.Supports(NetworkInterfaceComponent.IPv4))
                             .SelectMany(nic => nic.GetIPProperties()
-                                .UnicastAddresses.Select(a => a.Address)
-                                .Where(a => a.AddressFamily == AddressFamily.InterNetwork))
+                                .UnicastAddresses.Select(a => a.Address))
                             .Distinct()
                             .ToList();
 
@@ -193,13 +200,23 @@ namespace NetDiscovery.Udp
                         // Add sockets for new addresses
                         foreach (var address in addresses.Where(a => !_sockets.Keys.Contains(a)))
                         {
-                            var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
+                            var socket = new Socket(address.AddressFamily, SocketType.Dgram, ProtocolType.Udp)
                             {
                                 EnableBroadcast = true,
                                 ExclusiveAddressUse = false,
                                 ReceiveTimeout = SocketReadPeriodMs
                             };
                             socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+
+                            // For IPv6 join the link-local scope for all nodes
+                            if (address.AddressFamily == AddressFamily.InterNetworkV6)
+                            {
+                                socket.SetSocketOption(
+                                    SocketOptionLevel.IPv6,
+                                    SocketOptionName.AddMembership,
+                                    new IPv6MulticastOption(
+                                        _linkLocalEndPoint.Address, address.ScopeId));
+                            }
                             socket.Bind(new IPEndPoint(address, Port));
                             _sockets[address] = socket;
                         }
@@ -229,7 +246,11 @@ namespace NetDiscovery.Udp
                     {
                         // Read from the socket
                         var buffer = new byte[1024];
-                        EndPoint remoteEp = new IPEndPoint(0, 0);
+                        EndPoint remoteEp;
+                        if (socket.AddressFamily == AddressFamily.InterNetwork)
+                            remoteEp = new IPEndPoint(_broadcastEndPoint.Address, 0);
+                        else
+                            remoteEp = new IPEndPoint(_linkLocalEndPoint.Address, 0);
                         var len = socket.ReceiveFrom(buffer, ref remoteEp);
 
                         // Verify we got a query response
@@ -249,7 +270,14 @@ namespace NetDiscovery.Udp
             {
                 // Dispose of all sockets
                 foreach (var socket in _sockets.Values)
+                {
+                    if (socket.AddressFamily == AddressFamily.InterNetworkV6)
+                        socket.SetSocketOption(
+                            SocketOptionLevel.IPv6,
+                            SocketOptionName.DropMembership,
+                            new IPv6MulticastOption(_linkLocalEndPoint.Address)); 
                     socket.Dispose();
+                }
 
                 // Clear the sockets
                 _sockets.Clear();
