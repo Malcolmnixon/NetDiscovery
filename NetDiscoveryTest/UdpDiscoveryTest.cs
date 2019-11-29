@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
-using NetDiscovery.Provider;
+using NetDiscovery.Udp;
 
 namespace NetDiscoveryTest
 {

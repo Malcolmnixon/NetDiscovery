@@ -3,9 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDiscovery", "NetDiscovery\NetDiscovery.csproj", "{D677E80D-C253-4DA3-989D-4B3133C2623F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetDiscovery", "NetDiscovery\NetDiscovery.csproj", "{D677E80D-C253-4DA3-989D-4B3133C2623F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDiscoveryTest", "NetDiscoveryTest\NetDiscoveryTest.csproj", "{9AF56E79-1826-4513-8C7B-D79B0520AAF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetDiscoveryTest", "NetDiscoveryTest\NetDiscoveryTest.csproj", "{9AF56E79-1826-4513-8C7B-D79B0520AAF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleClient", "examples\ExampleClient\ExampleClient.csproj", "{16CE03A7-91D1-4756-8DBD-B48C2A08BA65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleServer", "examples\ExampleServer\ExampleServer.csproj", "{CBC18DBA-2717-45F1-91FF-03A9279877D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDiscovery.Udp", "NetDiscovery.Udp\NetDiscovery.Udp.csproj", "{047D105C-D4DC-4B21-9AB6-FEA5C2130937}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{9AF56E79-1826-4513-8C7B-D79B0520AAF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AF56E79-1826-4513-8C7B-D79B0520AAF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AF56E79-1826-4513-8C7B-D79B0520AAF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16CE03A7-91D1-4756-8DBD-B48C2A08BA65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16CE03A7-91D1-4756-8DBD-B48C2A08BA65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16CE03A7-91D1-4756-8DBD-B48C2A08BA65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16CE03A7-91D1-4756-8DBD-B48C2A08BA65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBC18DBA-2717-45F1-91FF-03A9279877D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBC18DBA-2717-45F1-91FF-03A9279877D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBC18DBA-2717-45F1-91FF-03A9279877D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBC18DBA-2717-45F1-91FF-03A9279877D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{047D105C-D4DC-4B21-9AB6-FEA5C2130937}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{047D105C-D4DC-4B21-9AB6-FEA5C2130937}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{047D105C-D4DC-4B21-9AB6-FEA5C2130937}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{047D105C-D4DC-4B21-9AB6-FEA5C2130937}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

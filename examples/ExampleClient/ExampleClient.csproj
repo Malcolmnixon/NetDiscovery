@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\NetDiscovery.Udp\NetDiscovery.Udp.csproj" />
+    <ProjectReference Include="..\..\NetDiscovery\NetDiscovery.csproj" />
+  </ItemGroup>
+
+</Project>

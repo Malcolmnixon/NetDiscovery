@@ -1,7 +1,6 @@
 ﻿using System.Text;
-using NetDiscovery.Server;
 
-namespace NetDiscovery.Provider
+namespace NetDiscovery.Udp
 {
     internal class UdpDiscoveryServer : IDiscoveryServer
     {

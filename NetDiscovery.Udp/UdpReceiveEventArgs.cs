@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
-namespace NetDiscovery.Provider
+namespace NetDiscovery.Udp
 {
     internal class UdpReceiveEventArgs
     {

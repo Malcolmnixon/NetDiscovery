@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace NetDiscovery.Client
+namespace NetDiscovery
 {
     /// <summary>
     /// Discovered Server event arguments

@@ -1,10 +1,16 @@
 ﻿using System;
-using NetDiscovery.Client;
 
-namespace NetDiscovery.Provider
+namespace NetDiscovery.Udp
 {
+    /// <summary>
+    /// UDP implementation for discovery client
+    /// </summary>
     internal class UdpDiscoveryClient : IDiscoveryClient
     {
+        /// <summary>
+        /// Initializes an instance of the UdpDiscoveryClient class
+        /// </summary>
+        /// <param name="provider">UDP discovery provider</param>
         internal UdpDiscoveryClient(UdpDiscoveryProvider provider)
         {
             Provider = provider;
@@ -13,10 +19,19 @@ namespace NetDiscovery.Provider
             Provider.UdpReceive += ProviderOnUdpReceive;
         }
 
+        /// <summary>
+        /// Discovered server event
+        /// </summary>
         public event EventHandler<DiscoveredServerEventArgs> DiscoveredServer;
 
+        /// <summary>
+        /// Gets the UDP discovery provider
+        /// </summary>
         internal UdpDiscoveryProvider Provider { get; }
 
+        /// <summary>
+        /// Running flag
+        /// </summary>
         internal bool Running { get; set; }
 
         public void Dispose()
@@ -45,7 +60,7 @@ namespace NetDiscovery.Provider
         {
             if (Running && e.Message != "?")
                 DiscoveredServer?.Invoke(
-                    this, 
+                    this,
                     new DiscoveredServerEventArgs(
                         e.EndPoint.Address,
                         e.Message));

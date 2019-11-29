@@ -1,16 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Version>0.0.1-alpha</Version>
     <Authors>Malcolm Nixon</Authors>
-    <Company></Company>
     <Description>Local Network Discovery Library for .NET projects</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>discovery udp</PackageTags>
     <PackageProjectUrl>https://github.com/Malcolmnixon/NetDiscovery</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Malcolmnixon/NetDiscovery</RepositoryUrl>
-    <PackageTags>discovery udp</PackageTags>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NetDiscovery\NetDiscovery.csproj" />
+  </ItemGroup>
 
 </Project>

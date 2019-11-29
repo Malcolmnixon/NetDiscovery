@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NetDiscovery.Client;
-using NetDiscovery.Server;
 
-namespace NetDiscovery.Provider
+namespace NetDiscovery
 {
+    /// <summary>
+    /// Discovery provider interface
+    /// </summary>
     public interface IDiscoveryProvider : IDisposable
     {
         /// <summary>

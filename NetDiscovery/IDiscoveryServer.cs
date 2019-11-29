@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NetDiscovery.Server
+namespace NetDiscovery
 {
     /// <summary>
     /// Discovery server interface

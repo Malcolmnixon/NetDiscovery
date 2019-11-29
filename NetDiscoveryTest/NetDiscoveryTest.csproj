@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NetDiscovery.Udp\NetDiscovery.Udp.csproj" />
     <ProjectReference Include="..\NetDiscovery\NetDiscovery.csproj" />
   </ItemGroup>
 

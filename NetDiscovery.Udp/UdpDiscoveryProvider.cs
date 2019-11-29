@@ -7,11 +7,12 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using NetDiscovery.Client;
-using NetDiscovery.Server;
 
-namespace NetDiscovery.Provider
+namespace NetDiscovery.Udp
 {
+    /// <summary>
+    /// UDP discovery provider
+    /// </summary>
     public class UdpDiscoveryProvider : IDiscoveryProvider
     {
         /// <summary>
@@ -236,7 +237,7 @@ namespace NetDiscovery.Provider
 
                         // Dispatch received
                         UdpReceive?.Invoke(
-                            this, 
+                            this,
                             new UdpReceiveEventArgs(
                                 (IPEndPoint)remoteEp,
                                 socket,
