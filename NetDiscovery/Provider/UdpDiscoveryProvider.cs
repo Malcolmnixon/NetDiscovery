@@ -7,13 +7,12 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using NetDiscovery.Client;
+using NetDiscovery.Server;
 
-namespace NetDiscovery.Client
+namespace NetDiscovery.Provider
 {
-    /// <summary>
-    /// UDP implementation of discovery client
-    /// </summary>
-    public class UdpDiscoveryClient : IDiscoveryClient
+    public class UdpDiscoveryProvider : IDiscoveryProvider
     {
         /// <summary>
         /// Interface scan period in milliseconds
@@ -36,6 +35,16 @@ namespace NetDiscovery.Client
         private readonly object _lock = new object();
 
         /// <summary>
+        /// Dictionary of active sockets
+        /// </summary>
+        private readonly Dictionary<IPAddress, Socket> _sockets = new Dictionary<IPAddress, Socket>();
+
+        /// <summary>
+        /// Broadcast end-point
+        /// </summary>
+        private readonly IPEndPoint _broadcastEndPoint;
+
+        /// <summary>
         /// Discovery cancellation token source
         /// </summary>
         private CancellationTokenSource _discoveryCancel;
@@ -46,11 +55,12 @@ namespace NetDiscovery.Client
         private Thread _discoveryThread;
 
         /// <summary>
-        /// Initializes a new instance of the UdpDiscoveryClient
+        /// Initializes a new instance of the UdpDiscoveryProvider
         /// </summary>
         /// <param name="port">UDP port number</param>
-        public UdpDiscoveryClient(int port)
+        public UdpDiscoveryProvider(int port)
         {
+            _broadcastEndPoint = new IPEndPoint(IPAddress.Broadcast, port);
             Port = port;
         }
 
@@ -60,20 +70,32 @@ namespace NetDiscovery.Client
         public int Port { get; }
 
         /// <summary>
-        /// Discovered Server event
+        /// Send Query event
         /// </summary>
-        public event EventHandler<DiscoveredServerEventArgs> DiscoveredServer;
+        internal event EventHandler UdpSendQuery;
 
         /// <summary>
-        /// Disposes of this objects resources
+        /// Receive event
         /// </summary>
+        internal event EventHandler<UdpReceiveEventArgs> UdpReceive;
+
         public void Dispose()
         {
             Stop();
         }
 
+        public IDiscoveryClient CreateClient()
+        {
+            return new UdpDiscoveryClient(this);
+        }
+
+        public IDiscoveryServer CreateServer()
+        {
+            return new UdpDiscoveryServer(this);
+        }
+
         /// <summary>
-        /// Start discovery client
+        /// Start discovery provider
         /// </summary>
         public void Start()
         {
@@ -91,7 +113,7 @@ namespace NetDiscovery.Client
         }
 
         /// <summary>
-        /// Stop discovery client
+        /// Stop discovery provider
         /// </summary>
         public void Stop()
         {
@@ -109,17 +131,23 @@ namespace NetDiscovery.Client
         }
 
         /// <summary>
+        /// Send UDP message
+        /// </summary>
+        /// <param name="message">Message to send</param>
+        internal void UdpSend(string message)
+        {
+            var messageBytes = Encoding.ASCII.GetBytes(message);
+
+            foreach (var socket in _sockets.Values)
+                socket.SendTo(messageBytes, _broadcastEndPoint);
+        }
+
+
+        /// <summary>
         /// Discovery thread
         /// </summary>
         private void DiscoveryThread()
         {
-            // Endpoint and message for broadcasting query
-            var queryEndPoint = new IPEndPoint(IPAddress.Broadcast, Port);
-            var queryMessage = Encoding.ASCII.GetBytes("?");
-
-            // Dictionary of sockets by address
-            var sockets = new Dictionary<IPAddress, Socket>();
-
             // Stopwatch for timing of periodic discovery actions
             var stopwatch = Stopwatch.StartNew();
 
@@ -155,14 +183,14 @@ namespace NetDiscovery.Client
                             .ToList();
 
                         // Remove sockets associated with missing addresses
-                        foreach (var address in sockets.Keys.Where(a => !addresses.Contains(a)))
+                        foreach (var address in _sockets.Keys.Where(a => !addresses.Contains(a)))
                         {
-                            sockets[address].Dispose();
-                            sockets.Remove(address);
+                            _sockets[address].Dispose();
+                            _sockets.Remove(address);
                         }
 
                         // Add sockets for new addresses
-                        foreach (var address in addresses.Where(a => !sockets.Keys.Contains(a)))
+                        foreach (var address in addresses.Where(a => !_sockets.Keys.Contains(a)))
                         {
                             var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
                             {
@@ -172,12 +200,12 @@ namespace NetDiscovery.Client
                             };
                             socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
                             socket.Bind(new IPEndPoint(address, Port));
-                            sockets[address] = socket;
+                            _sockets[address] = socket;
                         }
                     }
 
                     // If no sockets then wait and again
-                    if (sockets.Count == 0)
+                    if (_sockets.Count == 0)
                     {
                         _discoveryCancel.Token.WaitHandle.WaitOne(InterfaceScanPeriodMs);
                         continue;
@@ -187,13 +215,12 @@ namespace NetDiscovery.Client
                     if (elapsedMs >= sendQueryTimeoutMs)
                     {
                         sendQueryTimeoutMs = elapsedMs + QueryDiscoveryPeriodMs;
-                        foreach (var socket in sockets.Values)
-                            socket.SendTo(queryMessage, queryEndPoint);
+                        UdpSendQuery?.Invoke(this, EventArgs.Empty);
                     }
 
                     // Wait for incoming requests
-                    var readSockets = sockets.Values.ToList();
-                    var errorSockets = sockets.Values.ToList();
+                    var readSockets = _sockets.Values.ToList();
+                    var errorSockets = _sockets.Values.ToList();
                     Socket.Select(readSockets, null, errorSockets, SocketReadPeriodMs * 1000);
 
                     // Process all read requests
@@ -205,25 +232,26 @@ namespace NetDiscovery.Client
                         var len = socket.ReceiveFrom(buffer, ref remoteEp);
 
                         // Verify we got a query response
-                        var query = Encoding.ASCII.GetString(buffer, 0, len);
-                        if (query == "?")
-                            continue;
+                        var message = Encoding.ASCII.GetString(buffer, 0, len);
 
-                        // Report the discovered server
-                        //Trace.WriteLine($"Discovered server {query} at {remoteEp}");
-                        DiscoveredServer?.Invoke(
-                            this,
-                            new DiscoveredServerEventArgs(
-                                ((IPEndPoint) remoteEp).Address,
-                                query));
+                        // Dispatch received
+                        UdpReceive?.Invoke(
+                            this, 
+                            new UdpReceiveEventArgs(
+                                (IPEndPoint)remoteEp,
+                                socket,
+                                message));
                     }
                 }
             }
             finally
             {
                 // Dispose of all sockets
-                foreach (var socket in sockets.Values)
+                foreach (var socket in _sockets.Values)
                     socket.Dispose();
+
+                // Clear the sockets
+                _sockets.Clear();
             }
         }
     }
