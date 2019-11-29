@@ -146,10 +146,19 @@ namespace NetDiscovery.Udp
             var messageBytes = Encoding.ASCII.GetBytes(message);
 
             foreach (var socket in _sockets.Values)
-                if (socket.AddressFamily == AddressFamily.InterNetwork)
-                    socket.SendTo(messageBytes, _broadcastEndPoint);
-                else if (socket.AddressFamily == AddressFamily.InterNetworkV6)
-                    socket.SendTo(messageBytes, _linkLocalEndPoint);
+            {
+                try
+                {
+                    if (socket.AddressFamily == AddressFamily.InterNetwork)
+                        socket.SendTo(messageBytes, _broadcastEndPoint);
+                    else if (socket.AddressFamily == AddressFamily.InterNetworkV6)
+                        socket.SendTo(messageBytes, _linkLocalEndPoint);
+                }
+                catch (SocketException)
+                {
+                    // Can happen in firewall situations
+                }
+            }
         }
 
 
