@@ -200,25 +200,39 @@ namespace NetDiscovery.Udp
                         // Add sockets for new addresses
                         foreach (var address in addresses.Where(a => !_sockets.Keys.Contains(a)))
                         {
-                            var socket = new Socket(address.AddressFamily, SocketType.Dgram, ProtocolType.Udp)
+                            try
                             {
-                                EnableBroadcast = true,
-                                ExclusiveAddressUse = false,
-                                ReceiveTimeout = SocketReadPeriodMs
-                            };
-                            socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                                // Create the socket
+                                var socket = new Socket(address.AddressFamily, SocketType.Dgram, ProtocolType.Udp)
+                                {
+                                    EnableBroadcast = true,
+                                    ExclusiveAddressUse = false,
+                                    ReceiveTimeout = SocketReadPeriodMs
+                                };
 
-                            // For IPv6 join the link-local scope for all nodes
-                            if (address.AddressFamily == AddressFamily.InterNetworkV6)
-                            {
-                                socket.SetSocketOption(
-                                    SocketOptionLevel.IPv6,
-                                    SocketOptionName.AddMembership,
-                                    new IPv6MulticastOption(
-                                        _linkLocalEndPoint.Address, address.ScopeId));
+                                // Allow for reuse
+                                socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+
+                                // For IPv6 join the link-local scope for all nodes
+                                if (address.AddressFamily == AddressFamily.InterNetworkV6)
+                                {
+                                    socket.SetSocketOption(
+                                        SocketOptionLevel.IPv6,
+                                        SocketOptionName.AddMembership,
+                                        new IPv6MulticastOption(
+                                            _linkLocalEndPoint.Address, address.ScopeId));
+                                }
+
+                                // Bind to address
+                                socket.Bind(new IPEndPoint(address, Port));
+
+                                // Save socket
+                                _sockets[address] = socket;
                             }
-                            socket.Bind(new IPEndPoint(address, Port));
-                            _sockets[address] = socket;
+                            catch (SocketException)
+                            {
+                                // Can happen in firewall situations
+                            }
                         }
                     }
 
