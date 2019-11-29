@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDiscovery", "NetDiscovery\NetDiscovery.csproj", "{D677E80D-C253-4DA3-989D-4B3133C2623F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDiscoveryTest", "NetDiscoveryTest\NetDiscoveryTest.csproj", "{9AF56E79-1826-4513-8C7B-D79B0520AAF7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D677E80D-C253-4DA3-989D-4B3133C2623F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D677E80D-C253-4DA3-989D-4B3133C2623F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D677E80D-C253-4DA3-989D-4B3133C2623F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D677E80D-C253-4DA3-989D-4B3133C2623F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AF56E79-1826-4513-8C7B-D79B0520AAF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AF56E79-1826-4513-8C7B-D79B0520AAF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AF56E79-1826-4513-8C7B-D79B0520AAF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AF56E79-1826-4513-8C7B-D79B0520AAF7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D501D1A9-9668-4627-AB8A-2931BF3D885B}
+	EndGlobalSection
+EndGlobal
