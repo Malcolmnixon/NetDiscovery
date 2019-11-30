@@ -5,20 +5,20 @@ namespace NetDiscovery
     /// <summary>
     /// Discovery client interface
     /// </summary>
-    public interface IDiscoveryClient : IDisposable
+    public interface IClient : IDisposable
     {
         /// <summary>
-        /// Discovered Server event
+        /// Discovery event
         /// </summary>
-        event EventHandler<DiscoveredServerEventArgs> DiscoveredServer;
+        event EventHandler<DiscoveryEventArgs> Discovery;
 
         /// <summary>
-        /// Start discovery client
+        /// Start the client
         /// </summary>
         void Start();
 
         /// <summary>
-        /// Stop discovery client
+        /// Stop the client
         /// </summary>
         void Stop();
     }

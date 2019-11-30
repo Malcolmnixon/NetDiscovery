@@ -5,27 +5,27 @@ namespace NetDiscovery
     /// <summary>
     /// Discovery provider interface
     /// </summary>
-    public interface IDiscoveryProvider : IDisposable
+    public interface IProvider : IDisposable
     {
         /// <summary>
-        /// Create discovery client
+        /// Create a discovery client
         /// </summary>
-        /// <returns></returns>
-        IDiscoveryClient CreateClient();
+        /// <returns>New discovery client</returns>
+        IClient CreateClient();
 
         /// <summary>
-        /// Create discovery server
+        /// Create a discovery server
         /// </summary>
-        /// <returns></returns>
-        IDiscoveryServer CreateServer();
+        /// <returns>New discovery server</returns>
+        IServer CreateServer();
 
         /// <summary>
-        /// Start discovery provider
+        /// Start the provider
         /// </summary>
         void Start();
 
         /// <summary>
-        /// Stop discovery provider
+        /// Stop the provider
         /// </summary>
         void Stop();
     }

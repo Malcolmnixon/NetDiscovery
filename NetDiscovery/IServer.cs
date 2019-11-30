@@ -5,20 +5,20 @@ namespace NetDiscovery
     /// <summary>
     /// Discovery server interface
     /// </summary>
-    public interface IDiscoveryServer : IDisposable
+    public interface IServer : IDisposable
     {
         /// <summary>
-        /// Gets or sets the identity to announce
+        /// Gets or sets the server identity
         /// </summary>
         string Identity { get; set; }
 
         /// <summary>
-        /// Start discovery server
+        /// Start the server
         /// </summary>
         void Start();
 
         /// <summary>
-        /// Stop discovery server
+        /// Stop the server
         /// </summary>
         void Stop();
     }

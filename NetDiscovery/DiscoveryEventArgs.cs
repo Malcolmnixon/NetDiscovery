@@ -1,19 +1,18 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 
 namespace NetDiscovery
 {
     /// <summary>
-    /// Discovered Server event arguments
+    /// Discovery event arguments
     /// </summary>
-    public class DiscoveredServerEventArgs : EventArgs
+    public sealed class DiscoveryEventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the DiscoveredServerEventArgs
+        /// Initializes a new instance of the DiscoveryEventArgs class
         /// </summary>
         /// <param name="address">Server address</param>
         /// <param name="identity">Server identity</param>
-        public DiscoveredServerEventArgs(IPAddress address, string identity)
+        public DiscoveryEventArgs(IPAddress address, string identity)
         {
             Address = address;
             Identity = identity;
