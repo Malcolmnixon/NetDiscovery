@@ -188,6 +188,7 @@ namespace NetDiscovery.Udp
                         // Add new addresses
                         foreach (var address in addresses.Where(a => !sockets.ContainsKey(a)).ToList())
                         {
+                            System.Console.WriteLine($"Self : {address}");
                             var socket = UdpDiscoverySocket.Create(address, _port);
                             if (socket != null)
                                 sockets[address] = socket;
@@ -196,6 +197,7 @@ namespace NetDiscovery.Udp
                         // Remove lost addresses
                         foreach (var address in sockets.Keys.Where(a => !addresses.Contains(a)).ToList())
                         {
+                            System.Console.WriteLine($"Self Lost : {address}");
                             sockets[address].Dispose();
                             sockets.Remove(address);
                         }
