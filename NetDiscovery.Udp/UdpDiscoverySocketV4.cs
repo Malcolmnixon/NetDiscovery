@@ -42,7 +42,8 @@ namespace NetDiscovery.Udp
             }
             catch (SocketException ex)
             {
-                throw;
+                // TODO: Investigate network errors for unreachable network
+                // throw;
             }
         }
 
