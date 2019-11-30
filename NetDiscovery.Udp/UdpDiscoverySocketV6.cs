@@ -49,7 +49,7 @@ namespace NetDiscovery.Udp
                 // Send to the link-local group
                 Socket.SendTo(message, _linkLocalEndPoint);
             }
-            catch (SocketException ex)
+            catch (SocketException)
             {
                 // TODO: Investigate network errors for unreachable network
                 // throw;
