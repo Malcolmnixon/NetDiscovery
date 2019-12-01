@@ -40,10 +40,9 @@ namespace NetDiscovery.Udp
                 // Send to the broadcast address
                 Socket.SendTo(message, _broadcastEndPoint);
             }
-            catch (SocketException)
+            catch (SocketException ex)
             {
-                // TODO: Investigate network errors for unreachable network
-                // throw;
+                System.Console.WriteLine($"Socket Error : {ex.Message}");
             }
         }
 

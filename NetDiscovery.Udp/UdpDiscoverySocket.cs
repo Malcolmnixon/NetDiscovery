@@ -23,8 +23,9 @@ namespace NetDiscovery.Udp
                 if (address.AddressFamily == AddressFamily.InterNetworkV6)
                     return new UdpDiscoverySocketV6(address, port);
             }
-            catch (SocketException)
+            catch (SocketException ex)
             {
+                System.Console.WriteLine($"Socket Error : {ex.Message}");
             }
 
             // Unsupported or error
