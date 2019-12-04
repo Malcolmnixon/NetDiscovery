@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDiscovery", "NetDiscovery\NetDiscovery.csproj", "{3FAD84A2-8D8A-4B11-976C-81D248FD9CB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetDiscovery", "NetDiscovery\NetDiscovery.csproj", "{3FAD84A2-8D8A-4B11-976C-81D248FD9CB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDiscovery.Udp", "NetDiscovery.Udp\NetDiscovery.Udp.csproj", "{84C8F7C0-1BAB-4ACA-BECD-B2553421E00A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetDiscovery.Udp", "NetDiscovery.Udp\NetDiscovery.Udp.csproj", "{84C8F7C0-1BAB-4ACA-BECD-B2553421E00A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleServer", "example\ConsoleServer\ConsoleServer.csproj", "{7E445753-40D0-43B0-B498-960F21107EB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleServer", "example\ConsoleServer\ConsoleServer.csproj", "{7E445753-40D0-43B0-B498-960F21107EB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClient", "example\ConsoleClient\ConsoleClient.csproj", "{EBF03E78-54F0-43BD-B757-86921DD563B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleClient", "example\ConsoleClient\ConsoleClient.csproj", "{EBF03E78-54F0-43BD-B757-86921DD563B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDiscovery.Udp.Test", "NetDiscovery.Udp.Test\NetDiscovery.Udp.Test.csproj", "{B282B426-03A7-41C6-83B2-1641E38B205D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{EBF03E78-54F0-43BD-B757-86921DD563B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBF03E78-54F0-43BD-B757-86921DD563B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBF03E78-54F0-43BD-B757-86921DD563B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B282B426-03A7-41C6-83B2-1641E38B205D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B282B426-03A7-41C6-83B2-1641E38B205D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B282B426-03A7-41C6-83B2-1641E38B205D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B282B426-03A7-41C6-83B2-1641E38B205D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
